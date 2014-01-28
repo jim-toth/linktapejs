@@ -1,0 +1,23 @@
+<html ng-app="linktapeApp">
+	<head>
+		<title>Linkta.pe</title>
+		<link rel="stylesheet" href="style/linktape.css" />
+		<!--
+		<script type="text/javascript" src="js/lib/soundcloud-sdk.js"></script>
+		<script type="text/javascript" src="js/lib/soundcloud-api.js"></script>
+		<script type="text/javascript" src="js/lib/jsuri.js"></script>
+		-->
+		<script type="text/javascript" src="js/lib/angular.js"></script>
+		<script type="text/javascript" src="js/controllers.js"></script>
+	</head>
+	<body ng-controller="PlaylistCtrl">
+		<h2>{{ title }}</h2>
+		<div id="playlist">
+			<ul>
+				<li ng-repeat="song in playlist">
+					{{ song.artist }} - {{ song.title }}
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
