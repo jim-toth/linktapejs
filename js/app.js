@@ -1,0 +1,1 @@
+var linktapeApp = angular.module('linktapeApp', ['ngRoute', 'linktapeControllers', 'linktapeServices']);
