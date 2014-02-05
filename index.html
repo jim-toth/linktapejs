@@ -1,26 +1,30 @@
 <html ng-app="linktapeApp">
 	<head>
 		<title>Linkta.pe</title>
+		
 		<link rel="stylesheet" href="style/linktape.css" />
-		<!--
+
+		<!-- libs -->
 		<script type="text/javascript" src="js/lib/soundcloud-sdk.js"></script>
 		<script type="text/javascript" src="js/lib/soundcloud-api.js"></script>
-		-->
 		<script type="text/javascript" src="js/lib/jsuri.js"></script>
 		<script type="text/javascript" src="js/lib/angular.js"></script>
 		<script type="text/javascript" src="js/lib/angular-route.js"></script>
 		<script type="text/javascript" src="js/lib/angular-resource.js"></script>
 
+		<!-- app -->
 		<script type="text/javascript" src="js/controllers.js"></script>
 		<script type="text/javascript" src="js/services.js"></script>
+		<script type="text/javascript" src="js/directives.js"></script>
 		<script type="text/javascript" src="js/app.js"></script>
 	</head>
 	<body ng-controller="PlaylistCtrl">
 		<h2>{{ title }}</h2>
+
 		<div id="playlist">
 			<ul>
 				<li ng-repeat="song in playlist">
-					{{ song.artist }} - {{ song.title }}
+					<ls-song song='song'></ls-song>
 				</li>
 			</ul>
 		</div>
