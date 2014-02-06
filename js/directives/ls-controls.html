@@ -1,0 +1,6 @@
+<div id="ls-controls" class="ls-controls">
+	<a id="prev-control" class="control-button" ng-click="$parent.prev()">Prev</a>
+	<a id="play-control" class="control-button" ng-click="$parent.toggle()" ng-hide="$parent.songPlaying.isPlaying">Play</a>
+	<a id="play-control" class="control-button" ng-click="$parent.toggle()" ng-hide="!$parent.songPlaying.isPlaying">Pause</a>
+	<a id="next-control" class="control-button" ng-click="$parent.next()">Next</a>
+</div>
