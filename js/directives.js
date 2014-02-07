@@ -20,20 +20,26 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 							$scope.song.player = SC.Widget($element.find('iframe')[0]);
 
 							$scope.song.player.bind(SC.Widget.Events.PLAY, function (ev) {
-								if ($playlistScope.currentSong != 'undefined') {
+								if (typeof $playlistScope.currentSong != 'undefined') {
 									if($playlistScope.currentSong !== $scope.song) {
 										$playlistScope.currentSong.stop();
 										$playlistScope.currentSong = $scope.song;
 									}
+								} else {
+									$playlistScope.currentSong = $scope.song;
 								}
-
-								$playlistScope.setSongPlaying(true);
+								
+								$scope.$apply(function () {
+									$scope.setplaying({isPlaying: true});
+								});
 							});
 
 							$scope.song.player.bind(SC.Widget.Events.PAUSE, function () {
 								if ($playlistScope.currentSong != 'undefined') {
 									if($playlistScope.currentSong === $scope.song) {
-										$playlistScope.setSongPlaying(false);
+										$scope.$apply(function () {
+											$scope.setplaying({isPlaying: false});
+										});
 									}
 								}
 							});
@@ -59,10 +65,11 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 	return {
 		restrict: 'E',
 		scope: {
-			song: '='
+			song: '=song',
+			setplaying: '&setplaying'
 		},
 		templateUrl: 'js/directives/ls-song.html',
-		link: link
+		link: link,
 	};
 }]);
 

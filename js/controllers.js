@@ -6,13 +6,11 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function (
 		$scope.title = playlist_data.name;
 		$scope.playlist = playlist_data.playlist;
 		$scope.currentSong = undefined;
+		$scope.plstatus = { isPlaying: false };
 	});
 
-	$scope.songPlaying = {};
-	$scope.songPlaying.isPlaying = false;
-
-	$scope.setSongPlaying = function (isPlaying) {
-		$scope.songPlaying.isPlaying = isPlaying;
+	$scope.setplaying = function (isPlaying) {
+		$scope.plstatus.isPlaying = isPlaying;
 	}
 
 	$scope.toggle = function () {
@@ -25,6 +23,7 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function (
 
 	$scope.prev = function () {
 		console.log('prev');
+		console.log($scope.plstatus.isPlaying);
 	}
 
 	$scope.next = function () {
