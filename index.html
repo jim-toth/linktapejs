@@ -20,11 +20,11 @@
 	</head>
 	<body ng-controller="PlaylistCtrl">
 		<h2>{{ title }}</h2>
-		<ls-controls playlist='playlist'></ls-controls>
+		<ls-controls playlist="playlist"></ls-controls>
 		<div id="playlist">
 			<ul>
-				<li ng-repeat="song in playlist">
-					<ls-song song='song' setplaying='setplaying(isPlaying)' ></ls-song>
+				<li ng-repeat="song in playlist" class="ls-song-container">
+					<ls-song song="song" setplaying="setplaying(isPlaying)"></ls-song>
 				</li>
 			</ul>
 		</div>

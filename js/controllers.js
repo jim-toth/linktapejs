@@ -13,6 +13,10 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function (
 		$scope.plstatus.isPlaying = isPlaying;
 	}
 
+	$scope.setCurrentSong = function (song) {
+		$scope.currentSong = song;
+	}
+
 	$scope.toggle = function () {
 		if(typeof $scope.currentSong == 'undefined') {
 			$scope.currentSong = $scope.playlist[0];
@@ -22,11 +26,38 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function (
 	}
 
 	$scope.prev = function () {
-		console.log('prev');
-		console.log($scope.plstatus.isPlaying);
+		var currIdx = getIdxOfSong($scope.currentSong);
+
+		if (typeof $scope.playlist[currIdx-1] != 'undefined') {
+			$scope.playlist[currIdx-1].toggle();
+			console.log('Prev song: ' + $scope.playlist[currIdx+1].artist + ' - ' + $scope.playlist[currIdx+1].title);
+		} else {
+			console.log('End of playlist');
+		}
 	}
 
 	$scope.next = function () {
-		console.log('next');
+		var currIdx = getIdxOfSong($scope.currentSong);
+
+		if (typeof $scope.playlist[currIdx+1] != 'undefined') {
+			$scope.playlist[currIdx+1].toggle();
+			console.log('Next song: ' + $scope.playlist[currIdx+1].artist + ' - ' + $scope.playlist[currIdx+1].title);
+		} else {
+			console.log('End of playlist');
+		}
+	}
+
+	function getIdxOfSong(song) {
+		var idx = -1;
+		if(typeof $scope.playlist != 'undefined') {
+			for(var i=0; i < $scope.playlist.length; i++) {
+				if($scope.playlist[i] === song) {
+					idx = i;
+					break;
+				}
+			}
+		}
+
+		return idx;
 	}
 }]);

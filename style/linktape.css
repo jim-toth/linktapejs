@@ -28,3 +28,9 @@ ul {
 	border-radius: 5px;
 	padding: 5px;
 }
+
+.ls-song-container {
+	height: 375px;
+	width: 375px;
+	display:inline-block;
+}

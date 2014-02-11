@@ -23,10 +23,10 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 								if (typeof $playlistScope.currentSong != 'undefined') {
 									if($playlistScope.currentSong !== $scope.song) {
 										$playlistScope.currentSong.stop();
-										$playlistScope.currentSong = $scope.song;
+										$playlistScope.setCurrentSong($scope.song);
 									}
 								} else {
-									$playlistScope.currentSong = $scope.song;
+									$playlistScope.setCurrentSong($scope.song);
 								}
 								
 								$scope.$apply(function () {
@@ -43,6 +43,10 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 									}
 								}
 							});
+
+							$scope.song.player.bind(SC.Widget.Events.FINISH, function () {
+								$playlistScope.next();
+							});
 							
 							$scope.song.toggle = function () {
 								$scope.song.player.toggle();
@@ -50,7 +54,7 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 
 							$scope.song.stop = function () {
 								$scope.song.player.pause();
-								$scope.song.seek(0);
+								$scope.song.player.seekTo(0);
 							}
 
 						});
