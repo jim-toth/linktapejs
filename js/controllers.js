@@ -1,14 +1,28 @@
-var linktapeControllers = angular.module('linktapeControllers', []);
+var linktapeControllers = angular.module('linktapeControllers', ['ui.sortable']);
 
-linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function ($scope, Playlist) {
-	$scope.currentSong = undefined;
-	$scope.plstatus = { isPlaying: false };
-	
+linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout', function ($scope, Playlist, $timeout) {
 	$scope.playlist_data = Playlist.get({ pid: 'zwuevfv67' /*'2fcktcp0w'*/ }, function (playlist_data) {
 		$scope.pid = playlist_data.pid;
 		$scope.title = playlist_data.name;
 		$scope.playlist = playlist_data.playlist;
+		$scope.currentSong = undefined;
+		$scope.plstatus = { isPlaying: false };
 	});
+
+	$scope.sortableOptions = {
+		stop: function(e, ui) {
+			$scope.rebindAll()
+		}
+	}
+
+	$scope.rebindAll = function () {
+		angular.forEach($scope.playlist, function (song, key) {
+			$timeout(function () {
+				song.rebind();
+				console.log('rebound!');
+			}, 1000)
+		});
+	}
 
 	// Update the current song's play status (UI)
 	$scope.setplaying = function (isPlaying) {
@@ -35,7 +49,7 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function (
 
 		if (typeof $scope.playlist[currIdx-1] != 'undefined') {
 			$scope.playlist[currIdx-1].toggle();
-			console.log('Prev song: ' + $scope.playlist[currIdx+1].artist + ' - ' + $scope.playlist[currIdx+1].title);
+			console.log('Prev song: ' + $scope.playlist[currIdx-1].artist + ' - ' + $scope.playlist[currIdx-1].title);
 		} else {
 			console.log('End of playlist');
 		}

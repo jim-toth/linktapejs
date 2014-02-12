@@ -8,9 +8,15 @@
 		<script type="text/javascript" src="js/lib/soundcloud-sdk.js"></script>
 		<script type="text/javascript" src="js/lib/soundcloud-api.js"></script>
 		<script type="text/javascript" src="js/lib/jsuri.js"></script>
+		<script type="text/javascript" src="js/lib/jquery.js"></script>
+		<script type="text/javascript" src="js/lib/jquery.ui.widget.js"></script>
+		<script type="text/javascript" src="js/lib/jquery.ui.mouse.js"></script>
+		<script type="text/javascript" src="js/lib/jquery.ui.sortable.js"></script>
+		<script type="text/javascript" src="js/lib/jqueryui.js"></script>
 		<script type="text/javascript" src="js/lib/angular.js"></script>
 		<script type="text/javascript" src="js/lib/angular-route.js"></script>
 		<script type="text/javascript" src="js/lib/angular-resource.js"></script>
+		<script type="text/javascript" src="js/lib/angular-sortable.js"></script>
 
 		<!-- app -->
 		<script type="text/javascript" src="js/controllers.js"></script>
@@ -22,7 +28,7 @@
 		<ls-title title="title"></ls-title>
 		<ls-controls playlist="playlist"></ls-controls>
 		<div id="playlist">
-			<ul>
+			<ul ui-sortable="sortableOptions" ng-model="playlist">
 				<li ng-repeat="song in playlist" class="ls-song-container">
 					<ls-song song="song" setplaying="setplaying(isPlaying)"></ls-song>
 				</li>

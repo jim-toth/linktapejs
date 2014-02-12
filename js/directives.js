@@ -48,7 +48,7 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 						SC.oEmbed('http://api.soundcloud.com/tracks/' + track.id, SCOPTS, function (oEmbed) {
 							
 							// Replace loading placeholder
-							$element.find('div').replaceWith(oEmbed.html);
+							$element.find('div.loading-spinner').replaceWith(oEmbed.html);
 							$scope.song.player = SC.Widget($element.find('iframe')[0]);
 
 
@@ -63,43 +63,52 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 								$scope.song.player.seekTo(0);
 							}
 
+							$scope.song.rebind = function () {
+								// Re-query for player iframe
+								$scope.song.player = SC.Widget($element.find('iframe')[0]);
 
-							// Bind PLAY event
-							$scope.song.player.bind(SC.Widget.Events.PLAY, function (ev) {
+								// Bind PLAY event
+								$scope.song.player.bind(SC.Widget.Events.PLAY, function (ev) {
 
-								// Stop current song, change current song to this song.
-								if (typeof $playlistScope.currentSong != 'undefined') {
-									if($playlistScope.currentSong !== $scope.song) {
-										$playlistScope.currentSong.stop();
+									// Stop current song, change current song to this song.
+									if (typeof $playlistScope.currentSong != 'undefined') {
+										if($playlistScope.currentSong !== $scope.song) {
+											$playlistScope.currentSong.stop();
+											$playlistScope.setCurrentSong($scope.song);
+										}
+									} else {
 										$playlistScope.setCurrentSong($scope.song);
 									}
-								} else {
-									$playlistScope.setCurrentSong($scope.song);
-								}
-								
-								// Update playlist scope UI
-								$scope.$apply(function () {
-									$scope.setplaying({isPlaying: true});
+									
+									// Update playlist scope UI
+									$scope.$apply(function () {
+										$scope.setplaying({isPlaying: true});
+									});
 								});
-							});
 
-							// Bind PAUSE event
-							$scope.song.player.bind(SC.Widget.Events.PAUSE, function () {
+								// Bind PAUSE event
+								$scope.song.player.bind(SC.Widget.Events.PAUSE, function () {
 
-								// Update playlist scope UI
-								if ($playlistScope.currentSong != 'undefined') {
-									if($playlistScope.currentSong === $scope.song) {
-										$scope.$apply(function () {
-											$scope.setplaying({isPlaying: false});
-										});
+									// Update playlist scope UI
+									if ($playlistScope.currentSong != 'undefined') {
+										if($playlistScope.currentSong === $scope.song) {
+											$scope.$apply(function () {
+												$scope.setplaying({isPlaying: false});
+											});
+										}
 									}
-								}
+								});
+
+								// Bind FINISH event
+								$scope.song.player.bind(SC.Widget.Events.FINISH, function () {
+									$playlistScope.next();
+								});
+							}
+
+							$scope.song.player.bind(SC.Widget.Events.READY, function (ev) {
+								$scope.song.rebind();
 							});
 
-							// Bind FINISH event
-							$scope.song.player.bind(SC.Widget.Events.FINISH, function () {
-								$playlistScope.next();
-							});
 						});
 					} else {
 						// TODO: notify user of embed restriction
@@ -126,10 +135,10 @@ linktapeSong.directive('lsControls', [function () {
 		$scope.handlePaste = function (playlist, ev) {
 
 			// Check for clipboard data
-			if(ev.clipboardData.items.length > 0) {
+			if(ev.originalEvent.clipboardData.items.length > 0) {
 
 				// Create new song directive
-				playlist.push({ uri: ev.clipboardData.getData('text/plain') });
+				playlist.push({ uri: ev.originalEvent.clipboardData.getData('text/plain') });
 			}
 		}
 	}
