@@ -1,30 +1,35 @@
 var linktapeControllers = angular.module('linktapeControllers', []);
 
 linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function ($scope, Playlist) {
-	$scope.playlist_data = Playlist.get({ pid: '2fcktcp0w' }, function (playlist_data) {
+	$scope.currentSong = undefined;
+	$scope.plstatus = { isPlaying: false };
+	
+	$scope.playlist_data = Playlist.get({ pid: 'zwuevfv67' /*'2fcktcp0w'*/ }, function (playlist_data) {
 		$scope.pid = playlist_data.pid;
 		$scope.title = playlist_data.name;
 		$scope.playlist = playlist_data.playlist;
-		$scope.currentSong = undefined;
-		$scope.plstatus = { isPlaying: false };
 	});
 
+	// Update the current song's play status (UI)
 	$scope.setplaying = function (isPlaying) {
 		$scope.plstatus.isPlaying = isPlaying;
-	}
+	};
 
+	// Sets the current song
 	$scope.setCurrentSong = function (song) {
 		$scope.currentSong = song;
-	}
+	};
 
+	// Toggle play/pause of current song
 	$scope.toggle = function () {
 		if(typeof $scope.currentSong == 'undefined') {
 			$scope.currentSong = $scope.playlist[0];
 		}
 
 		$scope.currentSong.toggle();
-	}
+	};
 
+	// Play previous song
 	$scope.prev = function () {
 		var currIdx = getIdxOfSong($scope.currentSong);
 
@@ -34,8 +39,9 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function (
 		} else {
 			console.log('End of playlist');
 		}
-	}
+	};
 
+	// Play next song
 	$scope.next = function () {
 		var currIdx = getIdxOfSong($scope.currentSong);
 
@@ -45,8 +51,23 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function (
 		} else {
 			console.log('End of playlist');
 		}
-	}
+	};
 
+	// Save playlist
+	$scope.save = function () {
+		console.log('clicked save');
+
+		$scope.playlist_data.pid = ''; // generate new pid
+		$scope.playlist_data.name = $scope.title;
+		$scope.playlist_data.playlist = playlistToPlainArray();
+		$scope.playlist_data.$save(function (u, head) {
+			console.log('saved!?');
+			console.log(u);
+			console.log(head);
+		});
+	};
+
+	// Helper to get the playlist index of current song
 	function getIdxOfSong(song) {
 		var idx = -1;
 		if(typeof $scope.playlist != 'undefined') {
@@ -59,5 +80,21 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', function (
 		}
 
 		return idx;
+	};
+
+	// To plain object for saving
+	function playlistToPlainArray() {
+		var plistObj = [];
+
+		angular.forEach($scope.playlist, function (value, key) {
+			plistObj.push({
+				artist: value.artist,
+				title: value.title,
+				song_type: value.song_type,
+				uri: value.uri.toString()
+			});
+		});
+
+		return plistObj;
 	}
 }]);

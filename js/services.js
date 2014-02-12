@@ -1,9 +1,11 @@
 var linktapeServices = angular.module('linktapeServices', ['ngResource']);
 
 linktapeServices.factory('Playlist', ['$resource', function ($resource) {
-	return $resource('/p/:pid', {}, {
-		query: { method: 'GET', isArray: false }
-	});
+	return $resource('/p/:pid',	{
+			pid: '@pid',
+			name: '@title',
+			playlist: '@playlist'
+		});
 }]);
 
 linktapeServices.factory('ResolveURI', ['$resource', function ($resource) {

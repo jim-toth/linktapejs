@@ -143,3 +143,13 @@ linktapeSong.directive('lsControls', [function () {
 		controller: controller
 	};
 }]);
+
+linktapeSong.directive('lsTitle', [function () {
+	return {
+		restrict: 'E',
+		scope: {
+			title: '='
+		},
+		templateUrl: 'js/directives/ls-title.html'
+	};
+}]);

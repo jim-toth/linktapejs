@@ -3,5 +3,6 @@
 	<a id="play-control" class="control-button" ng-click="$parent.toggle()" ng-hide="$parent.plstatus.isPlaying">Play</a>
 	<a id="play-control" class="control-button" ng-click="$parent.toggle()" ng-hide="!$parent.plstatus.isPlaying">Pause</a>
 	<a id="next-control" class="control-button" ng-click="$parent.next()">Next</a>
-	<input id="add-song-control" placeholder="Paste song links here" ng-paste="handlePaste(playlist, $event)" />
+	<input id="add-song-control" placeholder="Paste song link" ng-paste="handlePaste(playlist, $event)" />
+	<a id="save-control" class="control-button" ng-click="$parent.save()">Save</a>
 </div>
