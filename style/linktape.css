@@ -50,3 +50,11 @@ ul {
 	cursor: -moz-grabbing;
 	cursor: -webkit-grabbing;
 }
+
+.ls-song-playing {
+	color: green;
+}
+
+.ls-song-paused {
+	color: red;
+}

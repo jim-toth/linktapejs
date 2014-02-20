@@ -1,20 +1,36 @@
 var linktapeControllers = angular.module('linktapeControllers', ['ui.sortable']);
 
-linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout', function ($scope, Playlist, $timeout) {
-	$scope.playlist_data = Playlist.get({ pid: 'zwuevfv67' /*'2fcktcp0w'*/ }, function (playlist_data) {
-		$scope.pid = playlist_data.pid;
-		$scope.title = playlist_data.name;
-		$scope.playlist = playlist_data.playlist;
+linktapeControllers.controller('RouteCtrl', [function ($scope, $route, $routeParams) {
+	console.log('routed!');
+}]);
+
+linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout', '$location', function ($scope, Playlist, $timeout, $location) {
+	// initialize
+	$scope.init = function () {
+		if($location.path() != '/') { //'zwuevfv67'
+			$scope.playlist_data = Playlist.get({ pid: $location.path().substring(1) }, function (playlist_data) {
+				$scope.pid = playlist_data.pid;
+				$scope.title = playlist_data.name;
+				$scope.playlist = playlist_data.playlist;
+			});
+		} else {
+			$scope.pid = undefined;
+			$scope.title = 'New Linktape';
+			$scope.playlist = {};
+		}
+
 		$scope.currentSong = undefined;
 		$scope.plstatus = { isPlaying: false };
-	});
+	};
 
+	// ui.sortable options
 	$scope.sortableOptions = {
 		stop: function(e, ui) {
-			$scope.rebindAll()
+			$scope.rebindAll();
 		}
 	}
 
+	// Rebind SoundCloud player event listeners
 	$scope.rebindAll = function () {
 		angular.forEach($scope.playlist, function (song, key) {
 			$timeout(function () {
@@ -69,15 +85,12 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 
 	// Save playlist
 	$scope.save = function () {
-		console.log('clicked save');
-
 		$scope.playlist_data.pid = ''; // generate new pid
 		$scope.playlist_data.name = $scope.title;
 		$scope.playlist_data.playlist = playlistToPlainArray();
 		$scope.playlist_data.$save(function (u, head) {
-			console.log('saved!?');
-			console.log(u);
-			console.log(head);
+			console.log('Saved Linktape: ' + u.pid);
+			$location.path(u.pid);
 		});
 	};
 
@@ -110,5 +123,7 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 		});
 
 		return plistObj;
-	}
+	};
+
+	$scope.init();
 }]);
