@@ -1,3 +1,4 @@
-<h2 ng-hide="editingTitle" ng-click="editingTitle = true" ng-init="editingTitle = false">{{ title }}</h2>
-<input type="text" ng-model="title" ng-show="editingTitle" placeholder="Enter Playlist Title" />
-<a id="save-title-control" ng-show="editingTitle" class="control-button" ng-click="editingTitle = false">Done</a>
+<h2 class="ls-title" ng-hide="editing" ng-click="editing = true" ng-init="editing = false">{{ title }}</h2>
+<div class="ls-title">
+	<input id="ls-title-input" type="text" ng-model="title" ng-show="editing" ng-blur="editing = false" ng-submit="editing = false" placeholder="Enter Playlist Title" />
+</div>

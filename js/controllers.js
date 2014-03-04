@@ -16,7 +16,7 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 		} else {
 			$scope.pid = undefined;
 			$scope.title = 'New Linktape';
-			$scope.playlist = {};
+			$scope.playlist = new Array();
 		}
 
 		$scope.currentSong = undefined;
@@ -32,12 +32,12 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 
 	// Rebind SoundCloud player event listeners
 	$scope.rebindAll = function () {
-		angular.forEach($scope.playlist, function (song, key) {
-			$timeout(function () {
+		$timeout(function () {
+			angular.forEach($scope.playlist, function (song, key) {
 				song.rebind();
 				console.log('rebound!');
-			}, 1000)
-		});
+			});
+		}, 1000);
 	}
 
 	// Update the current song's play status (UI)
@@ -85,9 +85,13 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 
 	// Save playlist
 	$scope.save = function () {
+		if(typeof $scope.playlist_data == 'undefined') {
+			$scope.playlist_data = new Playlist();
+		}
 		$scope.playlist_data.pid = ''; // generate new pid
 		$scope.playlist_data.name = $scope.title;
 		$scope.playlist_data.playlist = playlistToPlainArray();
+
 		$scope.playlist_data.$save(function (u, head) {
 			console.log('Saved Linktape: ' + u.pid);
 			$location.path(u.pid);

@@ -197,7 +197,7 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 				});
 			}
 		});
-	}
+	};
 
 	return {
 		restrict: 'E',
@@ -222,7 +222,7 @@ linktapeSong.directive('lsControls', [function () {
 				playlist.push({ uri: ev.originalEvent.clipboardData.getData('text/plain') });
 			}
 		}
-	}
+	};
 
 	return {
 		restrict: 'E',
@@ -234,12 +234,34 @@ linktapeSong.directive('lsControls', [function () {
 	};
 }]);
 
-linktapeSong.directive('lsTitle', [function () {
+linktapeSong.directive('lsTitle', ['$timeout', '$parse', function ($timeout, $parse) {
+	function link($scope, $element, $attrs) {
+
+		// Bind enter key to stop editing title
+		$element.find('input').keypress(function (e) {
+			if (e.which == 13) {
+				$timeout(function () {
+					$scope.editing = false;
+				});
+			}
+		});
+
+		// Focus input when editing title
+		$scope.$watch('editing', function (isEditing) {
+			if (isEditing === true) {
+				$timeout(function () {
+					$element.find('input').focus();
+				});
+			}
+		});
+	};
+
 	return {
 		restrict: 'E',
 		scope: {
 			title: '='
 		},
-		templateUrl: 'js/directives/ls-title.html'
+		templateUrl: 'js/directives/ls-title.html',
+		link: link
 	};
 }]);

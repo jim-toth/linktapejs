@@ -18,8 +18,49 @@
 	}
 }
 
+body {
+	background-color:rgb(75,75,75);
+	font-family:tahoma;
+}
+
 ul {
 	list-style: none;
+	margin-top:0px;
+}
+
+/* Linktape Title */
+.ls-title {
+	color:white;
+	margin:10 auto;
+	width: 80%;
+	font-size:36px;
+}
+
+.ls-title input {
+	border-radius: 10px;
+	border-color:white;
+	line-height:36px;
+	font-size:36px;
+	outline-style:none;
+}
+
+
+/* Linktape Controls */
+.ls-controls {
+	padding:15px;
+	background: white;
+	margin: 0 auto;
+	width:80%;
+	border: black 2px solid;
+}
+
+.ls-controls input {
+	border-radius: 10px;
+	border-color:white;
+	line-height:36px;
+	font-size:36px;
+	width:75%;
+	outline-style:none;
 }
 
 .control-button {
@@ -27,6 +68,21 @@ ul {
 	border: 2px solid;
 	border-radius: 5px;
 	padding: 5px;
+	margin:5px;
+}
+
+#save-control {
+	float: right;
+}
+
+
+/* Linktape Playlist */
+.ls-playlist {
+	margin:0 auto -20;
+	width:80%;
+	height:100%;
+	background-color:white;
+	border: black 2px solid;
 }
 
 .ls-song-container {
@@ -43,7 +99,6 @@ ul {
 	cursor: -webkit-grab;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
-
 }
 
 .ls-song-drag-handle:active {

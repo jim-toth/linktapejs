@@ -27,7 +27,7 @@
 	<body ng-controller="PlaylistCtrl">
 		<ls-title title="title"></ls-title>
 		<ls-controls playlist="playlist"></ls-controls>
-		<div id="playlist">
+		<div id="playlist" class="ls-playlist">
 			<ul ui-sortable="sortableOptions" ng-model="playlist">
 				<li ng-repeat="song in playlist" class="ls-song-container">
 					<ls-song song="song" setplaying="setplaying(isPlaying)"></ls-song>
