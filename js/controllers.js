@@ -15,7 +15,7 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 			});
 		} else {
 			$scope.pid = undefined;
-			$scope.title = 'New Linktape';
+			$scope.title = 'Linktape';
 			$scope.playlist = new Array();
 		}
 
@@ -96,6 +96,11 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 			console.log('Saved Linktape: ' + u.pid);
 			$location.path(u.pid);
 		});
+	};
+
+	// Remove Song
+	$scope.removeSong = function (idx) {
+		$scope.playlist.splice(idx,1);
 	};
 
 	// Helper to get the playlist index of current song

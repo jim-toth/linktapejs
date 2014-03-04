@@ -199,13 +199,23 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 		});
 	};
 
+	function controller($scope, $element) {
+		var $playlistScope = $scope.$parent.$parent;
+
+		$scope.destroy = function () {
+			$playlistScope.removeSong($scope.songIdx);
+		};
+	};
+
 	return {
 		restrict: 'E',
 		scope: {
 			song: '=song',
-			setplaying: '&setplaying'
+			setplaying: '&setplaying',
+			songIdx: '=idx'
 		},
 		templateUrl: 'js/directives/ls-song.html',
+		controller: controller,
 		link: link
 	};
 }]);

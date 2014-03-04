@@ -113,3 +113,7 @@ ul {
 .ls-song-paused {
 	color: red;
 }
+
+.ls-song-remove {
+	float:right;
+}

@@ -30,7 +30,7 @@
 		<div id="playlist" class="ls-playlist">
 			<ul ui-sortable="sortableOptions" ng-model="playlist">
 				<li ng-repeat="song in playlist" class="ls-song-container">
-					<ls-song song="song" setplaying="setplaying(isPlaying)"></ls-song>
+					<ls-song song="song" setplaying="setplaying(isPlaying)" idx="$index"></ls-song>
 				</li>
 			</ul>
 		</div>
