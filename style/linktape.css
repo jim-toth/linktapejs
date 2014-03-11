@@ -89,6 +89,7 @@ ul {
 	height: 375px;
 	width: 375px;
 	display:inline-block;
+	margin-bottom:50px;
 }
 
 .ls-song-drag-handle {
