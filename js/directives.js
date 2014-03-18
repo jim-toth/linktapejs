@@ -1,10 +1,26 @@
 var linktapeSong = angular.module('linktapeSong', ['linktapeServices']);
 
 linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
-	SCOPTS = {
+	var SCOPTS = {
 		"auto_play" : false,
 		"show_comments" : false,
 		"iframe" : true
+	};
+
+	var YTOPTS = {
+		'height': 375,
+		'width': 375,
+		'events': {
+			'onError': function (err) {
+				console.log(err);
+			}
+
+		},
+		"playerVars": {
+			"controls": 0,
+			"enablejsapi": 1,
+			"showinfo": 0
+		}
 	};
 
 	function link($scope, $element, $attrs) {
@@ -23,7 +39,7 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 			
 			// Update playlist scope UI
 			$scope.$apply(function () {
-				$scope.setplaying({isPlaying: true});
+				$scope.setplaying({ isPlaying: true });
 			});
 		};
 
@@ -83,28 +99,71 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 		};
 
 		function StreamStop() {
+
 			$element.find('.song-info').removeClass('ls-song-playing ls-song-paused');
 		};
 
-		// Resolve URL (for shortened links)
-		var uri = new Uri($scope.song.uri);
+		function handleYoutubeState(event) {
+			console.log(event);
 
-		if (typeof $scope.song.song_type == 'undefined') {
-			if (uri.host() == 'soundcloud.com' || uri.host() == 'www.soundcloud.com') {
-				$scope.song.song_type = 'sc';
-			} else if (uri.host() == 'hypem.com' || 'www'+uri.host() == 'hypem.com') {
-				var path = uri.path().split('/');
-
-				if (path[1] == 'go') {
-					$scope.song.song_type = 'sc'
-				} else if (path[1] == 'track') {
-					$scope.song.song_type = 'sc';
-					$scope.song.uri = 'http://hypem.com/go/sc/'+path[2];
+			if(event.data == YT.PlayerState.ENDED) {
+				$playlistScope.next();
+			} else if(event.data == YT.PlayerState.PLAYING) {
+				// Stop current song, change current song to this song.
+				if (typeof $playlistScope.currentSong != 'undefined') {
+					if($playlistScope.currentSong !== $scope.song) {
+						$playlistScope.currentSong.stop();
+						$playlistScope.setCurrentSong($scope.song);
+					}
 				} else {
-					console.error('Malformed hypem link.');
+					$playlistScope.setCurrentSong($scope.song);
+				}
+
+				$scope.$apply(function () {
+					$scope.setplaying({ isPlaying: true });
+				});
+			} else if(event.data == YT.PlayerState.PAUSED) {
+				// Update playlist scope UI
+				if ($playlistScope.currentSong != 'undefined') {
+					if($playlistScope.currentSong === $scope.song) {
+						$scope.$apply(function () {
+							$scope.setplaying({isPlaying: false});
+						});
+					}
+				}
+			}
+		};
+
+		// Resolve URL (for shortened links)
+		function handleURI(uri) {
+			if (typeof $scope.song.song_type == 'undefined') {
+				if (uri.host() == 'soundcloud.com' || uri.host() == 'www.soundcloud.com') {
+					$scope.song.song_type = 'sc';
+				} else if (uri.host() == 'hypem.com' || 'www'+uri.host() == 'hypem.com') {
+					var path = uri.path().split('/');
+
+					if (path[1] == 'go') {
+						$scope.song.song_type = 'sc'
+					} else if (path[1] == 'track') {
+						$scope.song.song_type = 'sc';
+						$scope.song.uri = 'http://hypem.com/go/sc/' + path[2];
+					} else {
+						console.error('Malformed hypem link.');
+					}
+				} else if(uri.host() == 'youtube.com' || uri.host() == 'www.youtube.com') {
+					$scope.song.song_type = 'yt';
+					$scope.song.video_id = uri.getQueryParamValue('v');
+				} else if(uri.host() == 'youtu.be') {
+					$scope.song.song_type = 'yt';
+					$scope.song.video_id = uri.path();
+				} else if(uri.host() == 'google.com' || uri.host() == 'www.google.com') {
+					$scope.song.uri = decodeURIComponent(uri.getQueryParamValue('url'));
+					handleURI(new Uri($scope.song.uri));
 				}
 			}
 		}
+
+		handleURI(new Uri($scope.song.uri));
 
 		ResolveURI.get({ uri: $scope.song.uri }, function (uri_data) {
 
@@ -151,8 +210,6 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 							
 						// });
 
-						
-
 						// Embed SoundCloud widget
 						SC.oEmbed('http://api.soundcloud.com/tracks/' + track.id, SCOPTS, function (oEmbed) {
 							
@@ -195,6 +252,26 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 						// TODO: notify user of embed restriction
 					}
 				});
+			} else if ($scope.song.song_type == 'yt') {
+				var theseOpts = $.extend(true, { 'videoId': $scope.song.video_id }, YTOPTS);
+				theseOpts.events.onStateChange = handleYoutubeState;
+				theseOpts.events.onReady = function () {
+					$scope.song.toggle = function () {
+						if ($scope.song.player.getPlayerState() == YT.PlayerState.PLAYING) {
+							$scope.song.player.pauseVideo();
+						} else {
+							$scope.song.player.playVideo();
+						}
+					}
+
+					$scope.song.stop = function () {
+						$scope.song.player.seekTo(0);
+						$scope.song.player.pauseVideo();
+					}
+				};
+				var ytid = 'yt'+Date.now();
+				$element.find('div.song-info').replaceWith('<div id="' + ytid + '"></div>');
+				$scope.song.player = new YT.Player(ytid, theseOpts);
 			}
 		});
 	};

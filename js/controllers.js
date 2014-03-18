@@ -127,7 +127,8 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 				artist: value.artist,
 				title: value.title,
 				song_type: value.song_type,
-				uri: value.uri.toString()
+				uri: value.uri.toString(),
+				video_id: value.video_id
 			});
 		});
 
