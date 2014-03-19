@@ -90,12 +90,19 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', '$rootScope', 'Playlis
 		if(typeof $scope.playlist_data == 'undefined') {
 			$scope.playlist_data = new Playlist();
 		}
-		$scope.playlist_data.pid = ''; // generate new pid
+
+		if(typeof $scope.pid == 'undefined') {
+			$scope.playlist_data.pid = '';
+		} else {
+			$scope.playlist_data.pid = $scope.pid;
+		}
+
 		$scope.playlist_data.name = $scope.title;
 		$scope.playlist_data.playlist = playlistToPlainArray();
 
 		$scope.playlist_data.$save(function (u, head) {
 			console.log('Saved Linktape: ' + u.pid);
+			$scope.pid = u.pid;
 			$location.path(u.pid);
 		});
 	};

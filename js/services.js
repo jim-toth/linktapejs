@@ -2,9 +2,7 @@ var linktapeServices = angular.module('linktapeServices', ['ngResource']);
 
 linktapeServices.factory('Playlist', ['$resource', function ($resource) {
 	return $resource('/p/:pid',	{
-			pid: '@pid',
-			name: '@title',
-			playlist: '@playlist'
+			pid: '@pid'
 		});
 }]);
 
