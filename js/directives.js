@@ -8,8 +8,8 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 	};
 
 	var YTOPTS = {
-		'height': 375,
-		'width': 375,
+		'height': 400,
+		'width': 400,
 		'events': {
 			'onError': function (err) {
 				console.log(err);
@@ -25,6 +25,8 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 
 	function link($scope, $element, $attrs) {
 		var $playlistScope = $scope.$parent.$parent;
+
+
 
 		function SCPlay(ev) {
 			// Stop current song, change current song to this song.

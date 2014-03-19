@@ -27,6 +27,7 @@ body {
 ul {
 	list-style: none;
 	margin-top:0px;
+	padding-left:0px;
 }
 
 /* Linktape Title */
@@ -48,20 +49,20 @@ ul {
 
 /* Linktape Controls */
 .ls-controls {
-	padding:15px;
+	padding: 15px;
 	background: white;
 	margin: 0 auto;
-	width:80%;
+	width: 80%;
 	border: black 2px solid;
 }
 
 .ls-controls input {
 	border-radius: 10px;
-	border-color:white;
-	line-height:36px;
-	font-size:36px;
-	width:75%;
-	outline-style:none;
+	border-color: white;
+	line-height: 36px;
+	font-size: 36px;
+	width: 75%;
+	outline-style: none;
 }
 
 .control-button {
@@ -87,23 +88,27 @@ ul {
 	border-left: black 2px solid;
 	border-right: black 2px solid;
 	border-bottom:0px;
+	/*overflow:overlay;*/
 }
 
 .ls-song-container {
-	height: 375px;
-	width: 375px;
+	height: 400px;
+	width: 400px;
 	display:inline-block;
-	margin-bottom:50px;
+}
+
+.ls-song-frame-wrapper {
+
 }
 
 .ls-song-drag-handle {
 	height:25px;
-	width:100%;
-	background-color: #000000;
+	width:400px;
+	background-color: rgb(75,75,75);
 	cursor: -moz-grab;
 	cursor: -webkit-grab;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
+	position:absolute;
+	color: white;
 }
 
 .ls-song-drag-handle:active {
@@ -121,4 +126,32 @@ ul {
 
 .ls-song-remove {
 	float:right;
+	border:none;
+	cursor:pointer;
+	height:20px;
+	width:20px;
+}
+
+.ls-song-remove:before {
+	content:"";
+	height:7px;
+	width:7px;
+	position:absolute;
+	top:5px;
+	right:10px;
+	border-bottom:5px solid white;
+	border-right:5px solid white;
+	-webkit-transform: rotate(-45deg);
+}
+
+.ls-song-remove:after {
+	content:"";
+	height:7px;
+	width:7px;
+	position:absolute;
+	top:5px;
+	right:0px;
+	border-top:5px solid white;
+	border-left:5px solid white;
+	-webkit-transform: rotate(-45deg);
 }
