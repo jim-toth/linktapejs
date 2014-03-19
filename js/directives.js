@@ -26,8 +26,6 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 	function link($scope, $element, $attrs) {
 		var $playlistScope = $scope.$parent.$parent;
 
-
-
 		function SCPlay(ev) {
 			// Stop current song, change current song to this song.
 			if (typeof $playlistScope.currentSong != 'undefined') {
@@ -274,6 +272,10 @@ linktapeSong.directive('lsSong', ['ResolveURI', function (ResolveURI) {
 				var ytid = 'yt'+Date.now();
 				$element.find('div.song-info').replaceWith('<div id="' + ytid + '"></div>');
 				$scope.song.player = new YT.Player(ytid, theseOpts);
+
+				$scope.song.rebind = function () {
+					$scope.song.player = new YT.Player(ytid, theseOpts);
+				};
 			}
 		});
 	};

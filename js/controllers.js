@@ -57,7 +57,9 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', '$rootScope', 'Playlis
 			$scope.currentSong = $scope.playlist[0];
 		}
 
-		$scope.currentSong.toggle();
+		if(typeof $scope.currentSong != 'undefined') {
+			$scope.currentSong.toggle();
+		}
 	};
 
 	// Play previous song
@@ -109,6 +111,7 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', '$rootScope', 'Playlis
 
 	// Remove Song
 	$scope.removeSong = function (idx) {
+
 		$scope.playlist.splice(idx,1);
 	};
 
