@@ -4,9 +4,11 @@ linktapeControllers.controller('RouteCtrl', [function ($scope, $route, $routePar
 	console.log('routed!');
 }]);
 
-linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout', '$location', function ($scope, Playlist, $timeout, $location) {
+linktapeControllers.controller('PlaylistCtrl', ['$scope', '$rootScope', 'Playlist', '$timeout', '$location', function ($scope, $rootScope, Playlist, $timeout, $location) {
 	// initialize
 	$scope.init = function () {
+		$scope.title = 'Linktape';
+		$rootScope.title = $scope.title;
 		if($location.path() != '/') { //'zwuevfv67'
 			$scope.playlist_data = Playlist.get({ pid: $location.path().substring(1) }, function (playlist_data) {
 				$scope.pid = playlist_data.pid;
@@ -15,7 +17,6 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 			});
 		} else {
 			$scope.pid = undefined;
-			$scope.title = 'Linktape';
 			$scope.playlist = new Array();
 		}
 
@@ -79,6 +80,7 @@ linktapeControllers.controller('PlaylistCtrl', ['$scope', 'Playlist', '$timeout'
 			$scope.playlist[currIdx+1].toggle();
 			console.log('Next song: ' + $scope.playlist[currIdx+1].artist + ' - ' + $scope.playlist[currIdx+1].title);
 		} else {
+			$scope.setplaying({isPlaying: false});
 			console.log('End of playlist');
 		}
 	};
